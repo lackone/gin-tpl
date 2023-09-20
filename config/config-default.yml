@@ -1,0 +1,45 @@
+name: "app"
+http:
+  listen: ":8080"
+log:
+  level: "info"
+db:
+  default:
+    write:
+      driver: mysql
+      host: localhost
+      port: 3306
+      username: root
+      password: root
+      database: test
+      loc: Local
+      charset: utf8mb4
+      collation: utf8mb4_unicode_ci
+      protocol: tcp
+      timeout: 10s
+      write_timeout: 3s
+      read_timeout: 3s
+      parse_time: true
+      allow_native_passwords: true
+      max_idle_conn: 10
+      max_open_conn: 100
+      conn_max_lifetime: 1h
+    read:
+      driver: mysql
+      host: localhost
+      port: 3306
+      username: root
+      password: root
+      database: test
+      loc: Local
+      charset: utf8mb4
+      collation: utf8mb4_unicode_ci
+      protocol: tcp
+      timeout: 10s
+      write_timeout: 3s
+      read_timeout: 3s
+      parse_time: true
+      allow_native_passwords: true
+      max_idle_conn: 10
+      max_open_conn: 100
+      conn_max_lifetime: 1h

@@ -1,0 +1,5 @@
+name: "app"
+http:
+  listen: ":9999"
+log:
+  level: "info"

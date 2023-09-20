@@ -21,7 +21,16 @@ type DBWriteRead struct {
 	ConnMaxLifetime      string `yaml:"conn_max_lifetime"`
 }
 
+type DBLog struct {
+	Enable bool   `yaml:"enable"`
+	Level  string `yaml:"level"`
+	Format string `yaml:"format"`
+	Type   string `yaml:"type"`
+	Path   string `yaml:"path"`
+}
+
 type DB struct {
 	Write DBWriteRead `yaml:"write"`
 	Read  DBWriteRead `yaml:"read"`
+	Log   DBLog       `yaml:"log"`
 }

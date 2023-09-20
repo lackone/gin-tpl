@@ -5,6 +5,12 @@ log:
   level: "info"
 db:
   default:
+    log:
+      enable: true
+      level: warn
+      format: text
+      type: stdout
+      path: logs/db.log
     write:
       driver: mysql
       host: localhost

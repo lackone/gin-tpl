@@ -79,7 +79,7 @@ func (app *App) DBW(keys ...string) *gorm.DB {
 		return app.DB[dbKey]
 	}
 
-	dbs, err := db.Load(conf.Write)
+	dbs, err := db.Load(conf.Write, conf.Log)
 	if err != nil {
 		panic(err)
 	}
@@ -116,7 +116,7 @@ func (app *App) DBR(keys ...string) *gorm.DB {
 		return app.DB[dbKey]
 	}
 
-	dbs, err := db.Load(conf.Read)
+	dbs, err := db.Load(conf.Read, conf.Log)
 	if err != nil {
 		panic(err)
 	}

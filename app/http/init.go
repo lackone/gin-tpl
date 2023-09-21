@@ -28,6 +28,8 @@ func NewServer(app *app.App) error {
 func attachVar(r *gin.Engine, app *app.App) {
 	r.Use(func(ctx *gin.Context) {
 		ctx.Set("app", app)
+
+		ctx.Next()
 	})
 }
 

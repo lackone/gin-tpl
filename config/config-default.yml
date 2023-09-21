@@ -7,10 +7,10 @@ db:
   default:
     log:
       enable: true
-      level: warn
+      level: info
       format: text
-      type: stdout
-      path: logs/db.log
+      type: file
+      path: ./logs/db.log
     write:
       driver: mysql
       host: localhost

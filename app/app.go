@@ -3,6 +3,8 @@ package app
 import (
 	"gin-tpl/app/core/config"
 	"gin-tpl/app/core/db"
+	"gin-tpl/app/core/log"
+	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 	"strings"
 	"sync"
@@ -15,15 +17,18 @@ type App struct {
 	ConfigPath        string              //当前配置文件路径
 	DB                map[string]*gorm.DB //数据库连接
 	DBLock            sync.RWMutex        //数据库锁
+	AppLog            *zerolog.Logger     //日志
+	AppLogLock        sync.RWMutex        //日志锁
 }
 
 // NewApp 实例化一个Application对象
 func NewApp(path string) *App {
 	return &App{
-		Path:   path,
-		Config: &config.Config{},
-		DB:     map[string]*gorm.DB{},
-		DBLock: sync.RWMutex{},
+		Path:       path,
+		Config:     &config.Config{},
+		DB:         map[string]*gorm.DB{},
+		DBLock:     sync.RWMutex{},
+		AppLogLock: sync.RWMutex{},
 	}
 }
 
@@ -50,6 +55,11 @@ func (app *App) InitConfig() error {
 func (app *App) InitDB() {
 	app.DBW()
 	app.DBR()
+}
+
+// InitLog 初始化日志
+func (app *App) InitLog() {
+	app.Log()
 }
 
 // DBW 获取写数据库
@@ -79,7 +89,7 @@ func (app *App) DBW(keys ...string) *gorm.DB {
 		return app.DB[dbKey]
 	}
 
-	dbs, err := db.Load(conf.Write, conf.Log)
+	dbs, err := db.LoadDB(conf.Write, conf.Log)
 	if err != nil {
 		panic(err)
 	}
@@ -116,7 +126,7 @@ func (app *App) DBR(keys ...string) *gorm.DB {
 		return app.DB[dbKey]
 	}
 
-	dbs, err := db.Load(conf.Read, conf.Log)
+	dbs, err := db.LoadDB(conf.Read, conf.Log)
 	if err != nil {
 		panic(err)
 	}
@@ -126,6 +136,31 @@ func (app *App) DBR(keys ...string) *gorm.DB {
 	return dbs
 }
 
+// Log 获取应用日志
+func (app *App) Log() *zerolog.Logger {
+	app.DBLock.RLock()
+	if app.AppLog != nil {
+		app.DBLock.RUnlock()
+		return app.AppLog
+	}
+	app.DBLock.RUnlock()
+
+	app.DBLock.Lock()
+	defer app.DBLock.Unlock()
+
+	if app.AppLog != nil {
+		return app.AppLog
+	}
+
+	appLog, err := log.LoadLog(app.Config.Log, app.Config.Env)
+	if err != nil {
+		panic(err)
+	}
+	app.AppLog = appLog
+
+	return app.AppLog
+}
+
 // Init 初始化
 func (app *App) Init() error {
 	err := app.InitConfig()
@@ -133,5 +168,6 @@ func (app *App) Init() error {
 		return err
 	}
 	app.InitDB()
+	app.InitLog()
 	return nil
 }

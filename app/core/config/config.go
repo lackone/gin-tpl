@@ -9,6 +9,7 @@ import (
 
 type Config struct {
 	Name string        `yaml:"name" env:"APP_NAME"`
+	Env  string        `yaml:"env" env:"APP_ENV"`
 	Http Http          `yaml:"http"`
 	Log  Log           `yaml:"log"`
 	DB   map[string]DB `yaml:"db"`
@@ -19,7 +20,10 @@ type Http struct {
 }
 
 type Log struct {
-	Level string `yaml:"level" env:"APP_LOG_LEVEL"`
+	Level  string `yaml:"level"`
+	Type   string `yaml:"type"`
+	Path   string `yaml:"path"`
+	Format string `yaml:"format"`
 }
 
 // Load 加载配置

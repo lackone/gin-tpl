@@ -1,5 +1,9 @@
-name: "app"
+name: app
+env: test
 http:
-  listen: ":9999"
+  listen: :9999
 log:
-  level: "info"
+  level: debug
+  type: file
+  path: ./logs/app.log
+  format: json

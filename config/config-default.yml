@@ -1,8 +1,12 @@
-name: "app"
+name: app
+env: test
 http:
-  listen: ":8080"
+  listen: :8080
 log:
-  level: "info"
+  level: debug
+  type: stdout
+  path: ./logs/app.log
+  format: json
 db:
   default:
     log:

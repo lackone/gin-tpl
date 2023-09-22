@@ -18,7 +18,7 @@ import (
 	"time"
 )
 
-func Load(c config.DBWriteRead, l config.DBLog) (*gorm.DB, error) {
+func LoadDB(c config.DBWriteRead, l config.DBLog) (*gorm.DB, error) {
 	var db *gorm.DB
 	var err error
 
